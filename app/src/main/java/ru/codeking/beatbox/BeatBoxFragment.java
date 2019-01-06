@@ -10,8 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import ru.codeking.beatbox.databinding.FragmentBeatBoxBinding;
 import ru.codeking.beatbox.databinding.ListItemSoundBinding;
+import ru.codeking.beatbox.model.BeatBox;
+import ru.codeking.beatbox.model.Sound;
+import ru.codeking.beatbox.viewmodel.SoundViewModel;
 
 public class BeatBoxFragment extends Fragment {
     private BeatBox mBeatBox;
@@ -28,12 +33,11 @@ public class BeatBoxFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentBeatBoxBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_beat_box, container, false);
 
         binding.recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        binding.recyclerView.setAdapter(new SoundAdapter());
+        binding.recyclerView.setAdapter(new SoundAdapter(mBeatBox.getSounds()));
 
         return binding.getRoot();
     }
@@ -44,11 +48,21 @@ public class BeatBoxFragment extends Fragment {
         private SoundHolder(ListItemSoundBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
+            mBinding.setViewModel(new SoundViewModel(mBeatBox));
+        }
+
+        public void bind(Sound sound){
+            mBinding.getViewModel().setSound(sound);
+            mBinding.executePendingBindings();
         }
     }
 
     private class SoundAdapter extends RecyclerView.Adapter<SoundHolder> {
-        @NonNull
+        private List<Sound> mSounds;
+
+        public SoundAdapter(List<Sound> sounds) {
+            mSounds = sounds;
+        }
         @Override
         public SoundHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
@@ -58,13 +72,14 @@ public class BeatBoxFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull SoundHolder soundHolder, int i) {
-
+        public void onBindViewHolder(SoundHolder holder, int position) {
+            Sound sound = mSounds.get(position);
+            holder.bind(sound);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return mSounds.size();
         }
     }
 }

@@ -1,4 +1,4 @@
-package ru.codeking.beatbox;
+package ru.codeking.beatbox.model;
 
 public class Sound {
     private String mAssetPath;

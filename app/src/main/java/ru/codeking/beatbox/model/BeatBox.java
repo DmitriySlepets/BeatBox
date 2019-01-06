@@ -1,4 +1,4 @@
-package ru.codeking.beatbox;
+package ru.codeking.beatbox.model;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -7,6 +7,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import ru.codeking.beatbox.model.Sound;
 
 public class BeatBox {
     private static final String TAG = "BeatBox";
